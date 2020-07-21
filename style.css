@@ -2,21 +2,43 @@
     font-family: 'Josefin Sans', sans-serif;
     margin: 0;
     padding: 0;
-}
-
-#top{
     background-color: #f6e8e5;
+
 }
 
-a{
+.main-links{
     color: gray;
-    font-size: 1.2em;
+    font-size: 1.3em;
 }
 
 #name{
     cursor: default;
+    margin: auto;
+}
+
+/* .proj{
+    height: 35%;
+} */
+
+.proj-info{
+    width: 70%;
 }
 
 
+/* .projImg{
+    width: 300px;
+} */
 
+.seeMore{
+    cursor: pointer;
+    text-decoration: underline;
+}
 
+.projectDetail{
+    font-size: 1.3em;
+}
+
+.screenshot{
+    max-width:100%;
+    max-height:100%;
+}
