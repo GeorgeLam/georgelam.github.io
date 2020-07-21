@@ -1,0 +1,22 @@
+*{
+    font-family: 'Josefin Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#top{
+    background-color: #f6e8e5;
+}
+
+a{
+    color: gray;
+    font-size: 1.2em;
+}
+
+#name{
+    cursor: default;
+}
+
+
+
+
