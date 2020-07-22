@@ -51,17 +51,17 @@
               </div>
 
               <div
-                class="row mx-auto w-100 my-4 d-flex flex-row justify-content-around"
+                class="row mx-auto w-50 my-4 d-flex flex-row justify-content-around"
               >
-                <a class="main-links"
+                <a class="social-links"
                   target="_blank"
                   href="https://www.linkedin.com/in/georgesflam/"
                   ><i class="fa fa-linkedin"></i
                 ></a>
-                <a class="main-links" href="mailto:george.sf.lam@gmail.com"
+                <!-- <a class="main-links" href="#"
                   ><i class="fa fa-envelope"></i
-                ></a>
-                <a class="main-links" target="_blank" href="https://github.com/GeorgeLam"
+                ></a> -->
+                <a class="social-links" target="_blank" href="https://github.com/GeorgeLam"
                   ><i class="fa fa-github"></i
                 ></a>
               </div>
@@ -83,7 +83,7 @@
                 <div class="row mb-3 proj d-flex flex-row"> 
                     <div class="col col-lg-8 proj-info">
                         <div class="row">
-                            <h4>Coronavirus Mobility Data</h4>
+                            <h4>Covid-19 Mobility Data</h4>
                         </div>
                         <div class="row">
                             <div class="project-card d-flex flex-row">
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                         <div class="row d-flex w-25 flex-row justify-content-between">
-                            <button type="button" class="btn btn-outline-dark">Demo</button>
+                            <!-- <a role="button" class="btn btn-outline-dark">Demo</a> -->
                             <a class="btn btn-outline-dark" target="_blank" href="https://github.com/GeorgeLam/coronavirus-mobility" role="button">Github</a>
                         </div>
                     </div>
@@ -104,17 +104,18 @@
                 </div>
                 
                     <div class="row text-center my-1 viewMore d-flex flex-row justify-content-center">
-                        <p class="seeMore" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">See more...</p>
+                        <p class="seeMore" data-toggle="collapse" href="#moreProjectDetail1" role="button" aria-expanded="false"
+                            aria-controls="moreProjectDetail1">See more...</p>
                     </div>
                     
                     <div class="row">
-                        <div class="col col-8 mb-5">
+                        <div class="col col-8">
                             <div class="row">
-                                <div class="collapse" id="collapseExample1">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
-                                        anim
-                                        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                <div class="collapse" id="moreProjectDetail1">
+                                        <p>Since the global outbreak of Covid-19, daily life has been impacted in all parts of the world. Data released by Google for over 140 countries, demonstrates the change in activity at certain location types (i.e. workplaces, recreational areas).
+                                        </p>
+                                        <p>The data was released in csv form (obtainable <a href="https://www.google.com/covid19/mobility/" target="_blank">here</a>), with data divided on a national and regional level. I downloaded the csv data, uploaded it to a MongoDB, and then created an API that fetches the data for the country, region, and location type requested by the user. Chart.js is used to display the data.
+                                        </p>
                                 </div>
                             </div>
                         </div>
@@ -133,16 +134,13 @@
                             <div class="row">
                                 <div class="project-card d-flex flex-row">
                                     <p class="projectDetail">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                                        ex, officia qui quae cupiditate quidem maiores perferendis
-                                        amet! Enim, ipsum? Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Culpa ex, officia qui quae cupiditate quidem
-                                        maiores perferendis amet! Enim, ipsum?
+                                        This website design incorporates Bootstrap and JQuery to deliver a responsive design and smooth user experience.
                                     </p>
+                                    
                                 </div>
                             </div>
                             <div class="row d-flex w-25 flex-row justify-content-between">
-                                <button type="button" class="btn btn-outline-dark">Demo</button>
+                                <a class="btn btn-outline-dark" target="_blank" href="https://georgelam.dev/redesigns/flight-finder/">Demo</a>
                                 <a class="btn btn-outline-dark" target="_blank" href="https://github.com/GeorgeLam/redesigns/tree/master/July%209%20-%20Flight%20finder" role="button">Github</a>
                             </div>
                         </div>
@@ -153,17 +151,17 @@
                     </div>
             
                     <div class="row text-center my-1 viewMore d-flex flex-row justify-content-center">
-                        <p class="seeMore" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">See more...</p>
+                        <p class="seeMore" data-toggle="collapse" href="#moreProjectDetail2" role="button" aria-expanded="false"
+                            aria-controls="moreProjectDetail2">See more...</p>
                     </div>
                     
                     <div class="row">
                         <div class="col col-8 mb-5">
-                            <div class="collapse" id="collapseExample2">
+                            <div class="collapse" id="moreProjectDetail2">
                                 <div class="">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
-                                    anim
-                                    keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                    <p>
+                                        Features including lazy loading, and typeahead on the airport selectors.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -183,16 +181,12 @@
                             <div class="row">
                                 <div class="project-card d-flex flex-row">
                                     <p class="projectDetail">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                                        ex, officia qui quae cupiditate quidem maiores perferendis
-                                        amet! Enim, ipsum? Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Culpa ex, officia qui quae cupiditate quidem
-                                        maiores perferendis amet! Enim, ipsum?
+                                        An online calendar app that allows users to create, edit and delete events. The events are stored in the user's local storage.
                                     </p>
                                 </div>
                             </div>
                             <div class="row d-flex w-25 flex-row justify-content-between">
-                                <button type="button" class="btn btn-outline-dark">Demo</button>
+                                <a class="btn btn-outline-dark" target="_blank" href="https://georgelam.dev/calendar/" role="button">Demo</a>
                                 <a class="btn btn-outline-dark" target="_blank" href="https://github.com/GeorgeLam/calendar" role="button">Github</a>
                             </div>
                         </div>
@@ -203,15 +197,14 @@
                     </div>
             
                     <div class="row text-center my-1 viewMore d-flex flex-row justify-content-center">
-                        <p class="seeMore" data-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample">See more...</p>
+                        <p class="seeMore" data-toggle="collapse" href="#moreProjectDetail3" role="button" aria-expanded="false" aria-controls="moreProjectDetail3">See more...</p>
                     </div>
 
                     <div class="row">
                         <div class="col col-8 mb-5">
-                            <div class="collapse" id="collapseExample3">
+                            <div class="collapse" id="moreProjectDetail3">
                                 <div class="">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim
-                                    keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                                    ......
                                 </div>
                             </div>
                         </div>
@@ -231,16 +224,12 @@
                             <div class="row">
                                 <div class="project-card d-flex flex-row">
                                     <p class="projectDetail">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-                                        ex, officia qui quae cupiditate quidem maiores perferendis
-                                        amet! Enim, ipsum? Lorem ipsum dolor sit amet consectetur
-                                        adipisicing elit. Culpa ex, officia qui quae cupiditate quidem
-                                        maiores perferendis amet! Enim, ipsum?
+                                        A recreation of the classic Simon Says game. The game escalates in difficulty, with patterns gradually getting longer, and the pattern hints gradually becoming faster.
                                     </p>
                                 </div>
                             </div>
                             <div class="row d-flex w-25 flex-row justify-content-between">
-                                <button type="button" class="btn btn-outline-dark">Demo</button>
+                                <a class="btn btn-outline-dark" target="_blank" href="https://georgelam.dev/simon-game/">Demo</a>
                                 <a class="btn btn-outline-dark" target="_blank" href="https://github.com/GeorgeLam/simon-game"
                                     role="button">Github</a>
                             </div>
@@ -252,13 +241,13 @@
                     </div>
             
                     <div class="row text-center my-1 viewMore d-flex flex-row justify-content-center">
-                        <p class="seeMore" data-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">See more...</p>
+                        <p class="seeMore" data-toggle="collapse" href="#moreProjectDetail4" role="button" aria-expanded="false"
+                            aria-controls="moreProjectDetail3">See more...</p>
                     </div>
             
                     <div class="row">
                         <div class="col col-8 mb-5">
-                            <div class="collapse" id="collapseExample3">
+                            <div class="collapse" id="moreProjectDetail4">
                                 <div class="">
                                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
                                     Nihil anim
@@ -285,7 +274,7 @@
                     <p>I'm a web developer based in Chichester. I focus on the front-end, but have experience with back-end too. I want to develop web applications that provide a great user experience and make people's lives easier.</p>
                     <p>Aside from web development, I'm a frequent runner, photographer, and Chinese learner.</p>
                     <p>While studying at King's College London, I spent a year abroad at the University of Hong Kong. Since graduating in 2019, I have lived in Beijing and Taipei.</p>
-                    <a href="#">Reach out to me!</a>
+                    <!-- <a href="#">Reach out to me!</a> -->
                 </div>
             </div>
         </section> 
