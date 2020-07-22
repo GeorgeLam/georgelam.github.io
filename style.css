@@ -57,17 +57,17 @@
     max-height:100%;
 }
 
-#about{
+/* #about{
     height: 90vh;
-}
+} */
 
 #about-title{
     text-align: center;
 }
 
-.about-text-container{
+/* .about-text-container{
     height: 60%;
-}
+} */
 
 .skills img{
     max-width: 100px;
@@ -76,4 +76,10 @@
 
 footer{
     border-top: solid rgba(39,39,39,0.1) 1px;
+}
+
+@media(max-width: 992px){
+    .proj-info{
+        width: 100%;
+    }
 }
