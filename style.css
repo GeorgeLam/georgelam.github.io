@@ -17,7 +17,7 @@
 }
 
 .social-links{
-    font-size: 2em;
+    font-size: 1.8em;
 }
 
 /* .proj{
@@ -57,6 +57,23 @@
     max-height:100%;
 }
 
-.about-text-container{
-    height: 80%;
+#about{
+    height: 90vh;
+}
+
+#about-title{
+    text-align: center;
+}
+
+/* .about-text-container{
+    height: 60%;
+} */
+
+.skills img{
+    max-width: 100px;
+    max-height: 100px;
+}
+
+footer{
+    border-top: solid rgba(39,39,39,0.1) 1px;
 }
