@@ -69,6 +69,12 @@
     height: 60%;
 } */
 
+#bookshelf{
+    object-fit: cover;
+    height: 180px;
+    width: 100%;
+}
+
 .skills img{
     max-width: 100px;
     max-height: 100px;
