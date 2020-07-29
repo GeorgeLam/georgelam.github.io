@@ -89,3 +89,9 @@ footer{
         width: 100%;
     }
 }
+
+@media(max-width: 480px){
+    h4#name{
+        font-size: 1.3rem;
+    }
+}
