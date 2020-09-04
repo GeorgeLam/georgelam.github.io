@@ -10,15 +10,20 @@
     color: gray;
     font-size: 1.3em;
 }
+/* 
+.social-links{
+    transform: scaleY(0);
+    transform-origin: left;
+} */
 
-#name{
+.name{
     cursor: default;
     margin: auto;
 }
 
-.social-links{
+/* .social-links{
     font-size: 1.8em;
-}
+} */
 
 /* .proj{
     height: 35%;
@@ -91,7 +96,7 @@ footer{
 }
 
 @media(max-width: 480px){
-    h4#name{
+    h4.name{
         font-size: 1.3rem;
     }
 }
