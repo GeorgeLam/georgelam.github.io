@@ -1,24 +1,33 @@
-*{
-    font-family: 'Josefin Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f6e8e5;
-
+* {
+  font-family: "Josefin Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f6e8e5;
 }
 
-.main-links, .social-links{
-    color: gray;
-    font-size: 1.3em;
+.main-links,
+.social-links {
+  color: gray;
+  font-size: 1.3em;
 }
-/* 
-.social-links{
-    transform: scaleY(0);
-    transform-origin: left;
+
+/* .content-area {
+  visibility: hidden;
 } */
 
-.name{
-    cursor: default;
-    margin: auto;
+.name,
+.sub,
+.loc {
+  cursor: default;
+  margin: auto;
+}
+
+.sub {
+  font-size: 1.6rem;
+}
+
+.loc {
+  font-size: 1rem;
 }
 
 /* .social-links{
@@ -29,74 +38,77 @@
     height: 35%;
 } */
 
-.proj-info{
-    width: 70%;
+.proj-info {
+  width: 70%;
 }
-
 
 /* .projImg{
     width: 300px;
 } */
 
-.seeMore{
-    cursor: pointer;
-    text-decoration: underline;
+.seeMore {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-.projectDetail, .about-text{
-    font-size: 1.3em;
+.projectDetail,
+.about-text {
+  font-size: 1.3em;
 }
 
-#projectsContainer a{
-    font-size: 1em;
-    text-decoration: underline;
+#projectsContainer a {
+  font-size: 1em;
+  text-decoration: underline;
 }
 
-#moreProjectDetail1 a{
-    color: #000444;
-    text-decoration: underline;
+#moreProjectDetail1 a {
+  color: #000444;
+  text-decoration: underline;
 }
 
-.screenshot{
-    max-width:100%;
-    max-height:100%;
+.screenshot {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* #about{
     height: 90vh;
 } */
 
-#about-title{
-    text-align: center;
+#about-title {
+  text-align: center;
 }
 
 /* .about-text-container{
     height: 60%;
 } */
 
-#bookshelf{
-    object-fit: cover;
-    height: 180px;
+#bookshelf {
+  object-fit: cover;
+  height: 180px;
+  width: 100%;
+}
+
+.skills img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+footer {
+  border-top: solid rgba(39, 39, 39, 0.1) 1px;
+}
+
+@media (max-width: 992px) {
+  .proj-info {
     width: 100%;
+  }
 }
 
-.skills img{
-    max-width: 100px;
-    max-height: 100px;
-}
-
-footer{
-    border-top: solid rgba(39,39,39,0.1) 1px;
-}
-
-@media(max-width: 992px){
-    .proj-info{
-        width: 100%;
-    }
-}
-
-@media(max-width: 480px){
-    h4.name{
-        font-size: 1.3rem;
-    }
+@media (max-width: 480px) {
+  .name {
+    font-size: 3.2rem;
+  }
+  p.sub {
+    font-size: 1.2rem;
+  }
 }
