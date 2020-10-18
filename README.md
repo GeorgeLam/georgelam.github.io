@@ -1,1 +1,1 @@
-Personal portfolio, created with vanilla Js and Bootstrap. 
+Personal portfolio showcasing my recent projects.
