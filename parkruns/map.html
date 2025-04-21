@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkrun & Wetherspoons Distance Mapper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background-color: #0b6e4f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-container h1 {
+            margin: 0 0 0 10px;
+            font-size: 1.5rem;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        #map {
+            flex: 3;
+            height: 100%;
+        }
+        .sidebar {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            border-left: 1px solid #ddd;
+            padding: 15px;
+        }
+        .filter-section {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .location-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .location-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .location-card h3 {
+            margin-top: 0;
+            color: #0b6e4f;
+        }
+        .distance-badge {
+            display: inline-block;
+            background-color: #ff6b35;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        .location-details {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .location-link {
+            display: inline-block;
+            color: #0b6e4f;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background-color: #f0f8f4;
+            transition: background-color 0.2s;
+        }
+        .location-link:hover {
+            background-color: #d7efe3;
+            text-decoration: underline;
+        }
+        input[type="text"], select, button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #0b6e4f;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #098060;
+        }
+        .legend {
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            line-height: 1.8;
+        }
+        .legend i {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+        .no-results {
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        .distance-control {
+            margin: 10px 0;
+        }
+        .distance-control label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .filter-stats {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+            #map {
+                height: 60vh;
+            }
+            .sidebar {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <h1>🏃 Parkrun & Wetherspoons Inn Distance Mapper 🍺</h1>
+        </div>
+        <div>
+            <select id="sort-select">
+                <option value="distance">📏 Sort by Distance (Nearest First)</option>
+                <option value="name">🏃 Sort by Parkrun Name</option>
+                <option value="hotel-name">🍺 Sort by Inn Name</option>
+            </select>
+        </div>
+    </header>
+    
+    <main>
+        <div id="map"></div>
+        <div class="sidebar">
+            <div class="filter-section">
+                <input type="text" id="search-input" placeholder="🔍 Search for a location...">
+                <div class="filter-options">
+                    <label>
+                        <input type="checkbox" id="show-lines" checked>
+                        🔗 Show connection lines
+                    </label>
+                </div>
+                <div class="distance-control">
+                    <label>📏 Max distance (km): <span id="distance-value">5.0</span></label>
+                    <input type="range" id="distance-filter" min="0.1" max="30" step="0.1" value="5.0">
+                    <div class="filter-stats" id="filter-stats"></div>
+                </div>
+            </div>
+            
+            <div id="locations-container">
+                <div class="loading">🔄 Loading data...</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script>
+        // Sample data - in a real implementation you would load this from a file
+        const sampleData = [
+            {
+                "file1_index": 613,
+                "point1": {
+                "name": "March parkrun",
+                "latitude": 52.550069,
+                "longitude": 0.086208
+                },
+                "closest_point2_index": 50,
+                "closest_point2": {
+                "name": "The Hippodrome, March",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-hippodrome/",
+                "latitude": 52.5516193029,
+                "longitude": 0.0872790813446
+                },
+                "shortest_distance": 0.18697958462309225
+            },
+            {
+                "file1_index": 152,
+                "point1": {
+                "name": "Leighton Buzzard junior parkrun",
+                "latitude": 51.914155,
+                "longitude": -0.662005
+                },
+                "closest_point2_index": 36,
+                "closest_point2": {
+                "name": "The Swan Hotel, Leighton Buzzard",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-swan-hotel/",
+                "latitude": 51.9163337705,
+                "longitude": -0.661899447441
+                },
+                "shortest_distance": 0.24237637183816296
+            },
+            {
+                "file1_index": 740,
+                "point1": {
+                "name": "Cliff Park junior parkrun",
+                "latitude": 51.937792,
+                "longitude": 1.28484
+                },
+                "closest_point2_index": 8,
+                "closest_point2": {
+                "name": "The Bottle Kiln, Harwich",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-bottle-kiln/",
+                "latitude": 51.9366895,
+                "longitude": 1.2809545
+                },
+                "shortest_distance": 0.29322484757127465
+            },
+            {
+                "file1_index": 568,
+                "point1": {
+                "name": "Harwich parkrun",
+                "latitude": 51.938035,
+                "longitude": 1.284809
+                },
+                "closest_point2_index": 8,
+                "closest_point2": {
+                "name": "The Bottle Kiln, Harwich",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-bottle-kiln/",
+                "latitude": 51.9366895,
+                "longitude": 1.2809545
+                },
+                "shortest_distance": 0.3036574889050539
+            },
+            {
+                "file1_index": 398,
+                "point1": {
+                "name": "Shrewsbury parkrun",
+                "latitude": 52.706942,
+                "longitude": -2.75921
+                },
+                "closest_point2_index": 35,
+                "closest_point2": {
+                "name": "The Shrewsbury Hotel, Shrewsbury",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-shrewsbury-hotel/",
+                "latitude": 52.709482,
+                "longitude": -2.757119
+                },
+                "shortest_distance": 0.31561722358779
+            },
+            {
+                "file1_index": 991,
+                "point1": {
+                "name": "West End junior parkrun",
+                "latitude": 52.549357,
+                "longitude": 0.084218
+                },
+                "closest_point2_index": 50,
+                "closest_point2": {
+                "name": "The Hippodrome, March",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-hippodrome/",
+                "latitude": 52.5516193029,
+                "longitude": 0.0872790813446
+                },
+                "shortest_distance": 0.32575662906621344
+            },
+            {
+                "file1_index": 1100,
+                "point1": {
+                "name": "Chippenham Playing Fields parkrun, Monmouth",
+                "latitude": 51.80783,
+                "longitude": -2.718161
+                },
+                "closest_point2_index": 25,
+                "closest_point2": {
+                "name": "The Kings Head Hotel, Monmouth",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-kings-head/",
+                "latitude": 51.811804,
+                "longitude": -2.715684
+                },
+                "shortest_distance": 0.4735658397383358
+            },
+            {
+                "file1_index": 871,
+                "point1": {
+                "name": "St Mary's parkrun",
+                "latitude": 50.729456,
+                "longitude": -2.760744
+                },
+                "closest_point2_index": 20,
+                "closest_point2": {
+                "name": "The Greyhound, Bridport",
+                "link": "https://hotels.jdwetherspoon.com/hotels/the-greyhound/",
+                "latitude": 50.733496,
+                "longitude": -2.757899
+                },
+                "shortest_distance": 0.49183280160208787
+            }
+        ];
+
+        // Initialize the map
+        const map = L.map('map').setView([54.0, -2.0], 6);  // Center on UK
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Icons for markers
+        const parkrunIcon = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            shadowSize: [41, 41]
+        });
+
+        const hotelIcon = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            shadowSize: [41, 41],
+            className: 'hotel-marker' // We'll use CSS to change the color
+        });
+
+        // Add legend
+        const legend = L.control({position: 'bottomright'});
+        legend.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'legend');
+            div.innerHTML = `
+                <i style="background: #2A81CB"></i> 🏃 Parkrun Location<br>
+                <i style="background: #CB2B3E"></i> 🍺 Wetherspoons Inn<br>
+                <i style="background: purple; height: 3px; width: 24px; border-radius: 0;"></i> 📏 Connection Line
+            `;
+            return div;
+        };
+        legend.addTo(map);
+
+        // Global variables for storing data
+        let allData = [];
+        let filteredData = [];
+        let markers = {};
+        let connectionLines = [];
+
+        // Function to create a marker with custom content
+        function createMarker(point, type, pairData) {
+            const icon = type === 'parkrun' ? parkrunIcon : hotelIcon;
+            const marker = L.marker([point.latitude, point.longitude], {icon: icon});
+            
+            // Create popup content
+            let popupContent = `<strong>${point.name}</strong><br>`;
+            
+            if (type === 'parkrun') {
+                popupContent += `<b>🏨 Nearest inn:</b> ${pairData.closest_point2.name}<br>`;
+                popupContent += `<b>📏 Distance:</b> ${(pairData.shortest_distance).toFixed(2)} km`;
+            } else {
+                popupContent += `<a href="${point.link}" target="_blank">Visit Inn Website</a><br>`;
+                popupContent += `<b>🏃 Nearest parkrun:</b> ${pairData.point1.name}<br>`;
+                popupContent += `<b>📏 Distance:</b> ${(pairData.shortest_distance).toFixed(2)} km`;
+            }
+            
+            marker.bindPopup(popupContent);
+            return marker;
+        }
+
+        // Function to add a connection line between a parkrun and hotel
+        function addConnectionLine(parkrun, hotel, distance) {
+            const line = L.polyline([
+                [parkrun.latitude, parkrun.longitude],
+                [hotel.latitude, hotel.longitude]
+            ], {
+                color: 'purple',
+                weight: 3,
+                opacity: 0.6,
+                dashArray: '5, 10'
+            });
+            
+            line.bindTooltip(`${distance.toFixed(2)} km`);
+            connectionLines.push(line);
+            return line;
+        }
+
+        // Function to update the sidebar
+        function updateSidebar() {
+            const container = document.getElementById('locations-container');
+            container.innerHTML = '';
+            
+            if (filteredData.length === 0) {
+                container.innerHTML = '                <div class="no-results">😕 No locations match your criteria</div>';
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const parkrun = item.point1;
+                const hotel = item.closest_point2;
+                const distance = item.shortest_distance;
+                
+                const card = document.createElement('div');
+                card.className = 'location-card';
+                card.setAttribute('data-id', item.file1_index);
+                
+                card.innerHTML = `
+                    <h3>🏃 ${parkrun.name}</h3>
+                    <div class="distance-badge">📏 ${distance.toFixed(2)} km</div>
+                    <div class="location-details">
+                        <strong>🍺 Nearest inn:</strong> ${hotel.name}<br>
+                    </div>
+                    <div class="link-container">
+                        <a href="${hotel.link}" target="_blank" class="location-link">🏨 View Inn Website</a>
+                        <a href="https://www.parkrun.org.uk/${parkrun.name.toLowerCase().replace(/\s+parkrun/i, '').replace(/\s+junior/i, '-junior').replace(/\s+/g, '-')}/course" target="_blank" class="location-link">🏃 View Parkrun Course</a>
+                    </div>
+                `;
+                
+                // Handle card click - but only when not clicking links
+                card.addEventListener('click', (e) => {
+                    // Check if the click target was a link - if so, don't do anything
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        return;
+                    }
+                    
+                    // Center the map on the parkrun
+                    map.setView([parkrun.latitude, parkrun.longitude], 14);
+                    
+                    // Open the popup for this parkrun
+                    if (markers[`parkrun-${item.file1_index}`]) {
+                        markers[`parkrun-${item.file1_index}`].openPopup();
+                    }
+                });
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Function to clear all markers and lines
+        function clearMap() {
+            Object.values(markers).forEach(marker => map.removeLayer(marker));
+            connectionLines.forEach(line => map.removeLayer(line));
+            markers = {};
+            connectionLines = [];
+        }
+
+        // Function to render the data on the map
+        function renderMap() {
+            clearMap();
+            
+            // Add markers and lines for filtered data
+            filteredData.forEach(item => {
+                const parkrun = item.point1;
+                const hotel = item.closest_point2;
+                
+                // Create parkrun marker
+                const parkrunMarker = createMarker(parkrun, 'parkrun', item);
+                parkrunMarker.addTo(map);
+                markers[`parkrun-${item.file1_index}`] = parkrunMarker;
+                
+                // Create hotel marker
+                const hotelMarker = createMarker(hotel, 'hotel', item);
+                hotelMarker.addTo(map);
+                markers[`hotel-${item.closest_point2_index}`] = hotelMarker;
+                
+                // Add connection line if checkbox is checked
+                if (document.getElementById('show-lines').checked) {
+                    const line = addConnectionLine(parkrun, hotel, item.shortest_distance);
+                    line.addTo(map);
+                }
+            });
+            
+            // Update the sidebar
+            updateSidebar();
+            
+            // Update filter stats
+            document.getElementById('filter-stats').textContent = 
+                `Showing ${filteredData.length} of ${allData.length} locations`;
+        }
+
+        // Function to filter data based on search term and distance
+        function filterData() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const maxDistance = parseFloat(document.getElementById('distance-filter').value);
+            
+            filteredData = allData.filter(item => {
+                // Check if distance is within max distance
+                const distanceMatch = parseFloat(item.shortest_distance) <= maxDistance;
+                
+                // Check if search term matches either parkrun or hotel name
+                const searchMatch = searchTerm === '' || 
+                    item.point1.name.toLowerCase().includes(searchTerm) || 
+                    item.closest_point2.name.toLowerCase().includes(searchTerm);
+                
+                return distanceMatch && searchMatch;
+            });
+            
+            sortData();
+            renderMap();
+        }
+
+        // Function to sort data
+        function sortData() {
+            const sortBy = document.getElementById('sort-select').value;
+            
+            switch (sortBy) {
+                case 'distance':
+                    filteredData.sort((a, b) => a.shortest_distance - b.shortest_distance);
+                    break;
+                case 'name':
+                    filteredData.sort((a, b) => a.point1.name.localeCompare(b.point1.name));
+                    break;
+                case 'hotel-name':
+                    filteredData.sort((a, b) => a.closest_point2.name.localeCompare(b.closest_point2.name));
+                    break;
+            }
+        }
+
+        // Initialize the application
+        function init() {
+            // Set up event listeners
+            document.getElementById('search-input').addEventListener('input', filterData);
+            
+            const distanceSlider = document.getElementById('distance-filter');
+            const distanceValue = document.getElementById('distance-value');
+            
+            distanceSlider.addEventListener('input', function() {
+                distanceValue.textContent = this.value;
+                filterData();
+            });
+            
+            document.getElementById('show-lines').addEventListener('change', renderMap);
+            document.getElementById('sort-select').addEventListener('change', function() {
+                sortData();
+                updateSidebar();
+            });
+            
+            // Initial filtering and rendering
+            filterData();
+        }
+
+        // Style for hotel markers
+        const style = document.createElement('style');
+        style.textContent = `
+            .hotel-marker {
+                filter: hue-rotate(150deg);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the app when the page loads
+        window.addEventListener('load', init);
+
+        // Function to load real JSON data (this would replace the sample data)
+        function loadRealData() {
+            fetch('https://georgelam-aws-s3-portfolio.s3.eu-west-2.amazonaws.com/distance_results.json')
+                .then(response => response.json())
+                .then(data => {
+                    allData = data;
+                    filterData(); // Apply filtering after loading data
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    // Fallback to sample data
+                    allData = sampleData;
+                    filterData();
+                });
+        }
+
+        // Uncomment the line below to load real data instead of sample data
+        loadRealData();
+    </script>
+</body>
+</html>
